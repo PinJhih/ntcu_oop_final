@@ -93,6 +93,96 @@ public class PhoneBook {
 		showContacts(contacts);
 	}
 
+	private static ArrayList<ArrayList<Contact>> toPages(ArrayList<Contact> contacts, int numPages, int pageSize) {
+		ArrayList<ArrayList<Contact>> pages = new ArrayList<>();
+
+		int index = 0;
+		for (int i = 0; i < numPages; i++) {
+			ArrayList<Contact> page = new ArrayList<>();
+			for (int j = 0; j < pageSize && index < contacts.size(); j++, index++) {
+				page.add(contacts.get(index));
+			}
+			pages.add(page);
+		}
+		return pages;
+	}
+
+	private static void showPerPage() {
+		String[][] options = { { "Next Page", "Exit" },
+				{ "Last Page", "Next Page", "Exit" },
+				{ "Last Page", "Exit" }, { "Exit" } };
+		ArrayList<Contact> contacts = contactMgr.getContacts();
+		int pageSize = config.getRowsPerPage();
+		int numPages = Math.ceilDiv(contacts.size(), pageSize);
+		ArrayList<ArrayList<Contact>> pages = toPages(contacts, numPages, pageSize);
+
+		int page = 0;
+		int cmd = -1;
+		boolean cmdErr = false;
+		while (true) {
+			if (!cmdErr)
+				showContacts(pages.get(page));
+			cmdErr = false;
+			try {
+				if (numPages <= 1)
+					printOptions(options[3]);
+				else if (page == 0)
+					printOptions(options[0]);
+				else if (page == numPages - 1)
+					printOptions(options[2]);
+				else
+					printOptions(options[1]);
+
+				cmd = stdin.nextInt();
+				if (numPages <= 1) {
+					if (cmd == 1)
+						break;
+					else {
+						println("Error_wrong_command");
+						print("Please_enter_again:");
+						cmdErr = true;
+					}
+				} else if (page == 0) {
+					if (cmd == 1)
+						page++;
+					else if (cmd == 2)
+						break;
+					else {
+						println("Error_wrong_command");
+						print("Please_enter_again:");
+						cmdErr = true;
+					}
+				} else if (page == numPages - 1) {
+					if (cmd == 1)
+						page--;
+					else if (cmd == 2)
+						break;
+					else {
+						println("Error_wrong_command");
+						print("Please_enter_again:");
+						cmdErr = true;
+					}
+				} else {
+					if (cmd == 1)
+						page--;
+					else if (cmd == 2)
+						page++;
+					else if (cmd == 3)
+						break;
+					else {
+						println("Error_wrong_command");
+						print("Please_enter_again:");
+						cmdErr = true;
+					}
+				}
+			} catch (Exception e) {
+				println("Error_wrong_command");
+				print("Please_enter_again:");
+				cmdErr = true;
+			}
+		}
+	}
+
 	private static void showByCat() {
 		catMgr.print();
 		int index;
@@ -201,7 +291,8 @@ public class PhoneBook {
 				case 1:
 					showAll();
 					break;
-				case 2: // TODO: Show_per_page
+				case 2:
+					showPerPage();
 					break;
 				case 3:
 					showByCat();
