@@ -5,7 +5,7 @@ public class PhoneBook {
 	private static final Scanner stdin = new Scanner(System.in);
 	private static final ConfigMgr config = new ConfigMgr();
 	private static final AccountMgr accountMgr = new AccountMgr(config);
-	private static final ContactMgr contactMgr = new ContactMgr();
+	private static final ContactMgr contactMgr = new ContactMgr(config.getSortConfig());
 	private static final CatMgr catMgr = new CatMgr();
 
 	private static final String[] mainMenuContain = { "****************************************",
@@ -15,6 +15,7 @@ public class PhoneBook {
 			"[11].Set_show_perpage [12].Set_order [13].Set_sort_by_field",
 			"[14].Show_raw_data [15].Data_optimize [99].Exit_system",
 			"****************************************" };
+
 	private static final String[] fields = { "ID", "Name", "Phone", "Catalog", "Email", "BD" };
 
 	private static void print(String str) {

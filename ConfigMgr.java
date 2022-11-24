@@ -58,7 +58,7 @@ public class ConfigMgr {
 		return lastID;
 	}
 
-	public Map<String, String> getConfig() {
+	public Map<String, String> getSortConfig() {
 		return sortConfig;
 	}
 
