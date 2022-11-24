@@ -1,11 +1,19 @@
 import java.util.Scanner;
 
 public class PhoneBook {
-	private static Scanner stdin = new Scanner(System.in);
-	private static Config config = new Config();
-	private static AccountMgr accountMgr = new AccountMgr(config);
-	private static ContactMgr contactMgr = new ContactMgr();
-	private static CatMgr catMgr = new CatMgr();
+	private static final Scanner stdin = new Scanner(System.in);
+	private static final ConfigMgr config = new ConfigMgr();
+	private static final AccountMgr accountMgr = new AccountMgr(config);
+	private static final ContactMgr contactMgr = new ContactMgr();
+	private static final CatMgr catMgr = new CatMgr();
+
+	private static final String[] mainMenuContain = { "****************************************",
+			"[1].Show_all [2].Show_per_page [3].Show_by_catalog ",
+			"[4].Search [5].Modify[6].Delete [7].Add_contact ",
+			"[8].Add_catalog [9].Show_all_catalog [10].Set_display_field ",
+			"[11].Set_show_perpage [12].Set_order [13].Set_sort_by_field",
+			"[14].Show_raw_data [15].Data_optimize [99].Exit_system",
+			"****************************************" };
 
 	private static void print(String str) {
 		System.out.print(str);
@@ -33,7 +41,69 @@ public class PhoneBook {
 		System.exit(0);
 	}
 
+	private static void showMainMenu() {
+		for (String contain : mainMenuContain)
+			println(contain);
+	}
+
 	public static void main(String[] args) {
 		login();
+		int cmd = -1;
+		boolean cmdErr = false;
+		boolean terminated = false;
+
+		while (!terminated) {
+			if (!cmdErr)
+				showMainMenu();
+			try {
+				cmd = stdin.nextInt();
+				cmdErr = false;
+			} catch (Exception e) {
+				stdin.nextLine(); // clear input cache
+				cmd = -1;
+			}
+
+			switch (cmd) {
+				case 1: // TODO: Show_all
+					break;
+				case 2: // TODO: Show_per_page
+					break;
+				case 3: // TODO: Show_by_catalog
+					break;
+				case 4: // TODO: Search
+					break;
+				case 5: // TODO: Modif
+					break;
+				case 6: // TODO: Delete
+					break;
+				case 7: // TODO: Add_contact
+					break;
+				case 8: // TODO: Add_catalog
+					break;
+				case 9: // TODO: Show_all_catalog
+					break;
+				case 10: // TODO: Set_display_field
+					break;
+				case 11: // TODO: Set_show_perpage
+					break;
+				case 12: // TODO: Set_order
+					break;
+				case 13: // TODO: Set_sort_by_field
+					break;
+				case 14: // TODO: Show_raw_data
+					break;
+				case 15: // TODO: Data_optimize
+					break;
+				case 99: // TODO: Exit_system
+					terminated = true;
+					System.exit(0);
+					break;
+				default:
+					println("Error_wrong_command");
+					print("Please_enter_again:");
+					cmdErr = true;
+					break;
+			}
+		}
 	}
 }
