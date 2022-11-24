@@ -1,3 +1,4 @@
+import java.util.Map;
 import java.util.StringTokenizer;
 
 public class Contact {
@@ -5,8 +6,13 @@ public class Contact {
 
 	public Contact(String strFormat) {
 		StringTokenizer st = new StringTokenizer(strFormat);
-		int ID = Integer.parseInt(st.nextToken());
-		id = String.format("%04d", ID);
+		String _id = st.nextToken();
+		try {
+			int ID = Integer.parseInt(_id);
+			id = String.format("%04d", ID);
+		} catch (Exception e) {
+			id = _id;
+		}
 		name = st.nextToken();
 		phone = st.nextToken();
 		cat = st.nextToken();
@@ -20,13 +26,19 @@ public class Contact {
 		return strFormat;
 	}
 
-	public void print() {
+	public void print(Map<String, Boolean> config) {
 		System.out.printf("%-4s", id);
-		System.out.printf(" %-12s", name);
-		System.out.printf(" %-11s", phone);
-		System.out.printf(" %-12s", cat);
-		System.out.printf(" %-24s", email);
-		System.out.printf(" %-4s", birthday);
+		if (config.get("show_name"))
+			System.out.printf(" %-12s", name);
+		if (config.get("show_phone"))
+			System.out.printf(" %-11s", phone);
+		if (config.get("show_catalog"))
+			System.out.printf(" %-12s", cat);
+		if (config.get("show_email"))
+			System.out.printf(" %-24s", email);
+		if (config.get("show_birthday"))
+			System.out.printf(" %-4s", birthday);
 		System.out.println();
+
 	}
 }

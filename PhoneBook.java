@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class PhoneBook {
@@ -46,6 +47,20 @@ public class PhoneBook {
 			println(contain);
 	}
 
+	private static void showContacts(ArrayList<Contact> contacts) {
+		Contact fields = new Contact("[ID] [Name] [Phone] [Catalog] [Email] [BD]");
+		fields.print(config.getDisplayConfig());
+
+		for (Contact contact : contacts) {
+			contact.print(config.getDisplayConfig());
+		}
+	}
+
+	private static void showAll() {
+		ArrayList<Contact> contacts = contactMgr.getContacts();
+		showContacts(contacts);
+	}
+
 	public static void main(String[] args) {
 		login();
 		int cmd = -1;
@@ -64,7 +79,8 @@ public class PhoneBook {
 			}
 
 			switch (cmd) {
-				case 1: // TODO: Show_all
+				case 1:
+					showAll();
 					break;
 				case 2: // TODO: Show_per_page
 					break;
