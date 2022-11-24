@@ -66,7 +66,15 @@ public class ConfigMgr {
 		return displayConfig;
 	}
 
-	public int getRowsPerPage(){
+	public int getRowsPerPage() {
 		return rowsPerPage;
+	}
+
+	public void setSortByField(String field) {
+		sortConfig.put("show_sort_field", field.toLowerCase());
+	}
+
+	public void setSortOrder(String order) {
+		sortConfig.put("show_sort_order", order.toLowerCase());
 	}
 }

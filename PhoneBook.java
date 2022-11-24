@@ -8,7 +8,7 @@ public class PhoneBook {
 	private static final ContactMgr contactMgr = new ContactMgr(config.getSortConfig());
 	private static final CatMgr catMgr = new CatMgr();
 
-	private static final String[] mainMenuContain = { "****************************************",
+	private static final String[] MAIN_MENU_CONTAIN = { "****************************************",
 			"[1].Show_all [2].Show_per_page [3].Show_by_catalog ",
 			"[4].Search [5].Modify[6].Delete [7].Add_contact ",
 			"[8].Add_catalog [9].Show_all_catalog [10].Set_display_field ",
@@ -16,7 +16,7 @@ public class PhoneBook {
 			"[14].Show_raw_data [15].Data_optimize [99].Exit_system",
 			"****************************************" };
 
-	private static final String[] fields = { "ID", "Name", "Phone", "Catalog", "Email", "BD" };
+	private static final String[] FIELDS = { "ID", "Name", "Phone", "Catalog", "Email", "BD" };
 
 	private static void print(String str) {
 		System.out.print(str);
@@ -45,7 +45,7 @@ public class PhoneBook {
 	}
 
 	private static void showMainMenu() {
-		for (String contain : mainMenuContain)
+		for (String contain : MAIN_MENU_CONTAIN)
 			println(contain);
 	}
 
@@ -66,6 +66,15 @@ public class PhoneBook {
 				print("Please_enter_again:");
 				stdin.nextLine(); // clear
 			}
+		}
+		System.out.println();
+	}
+
+	private static void printOptions(String[] options) {
+		for (int i = 0; i < options.length; i++) {
+			if (i != 0)
+				print(" ");
+			System.out.printf("[%d].%s", i + 1, options[i]);
 		}
 		System.out.println();
 	}
@@ -108,17 +117,12 @@ public class PhoneBook {
 	}
 
 	private static void search() {
-		for (int i = 0; i < fields.length; i++) {
-			if (i != 0)
-				print(" ");
-			System.out.printf("[%d].%s", i + 1, fields[i]);
-		}
-		System.out.println();
+		printOptions(FIELDS);
 		int field = -1;
 		while (field == -1) {
 			try {
 				field = stdin.nextInt();
-				if (0 < field && field <= fields.length)
+				if (0 < field && field <= FIELDS.length)
 					break;
 				println("Error_wrong_field");
 				print("Please_enter_again:");
@@ -130,6 +134,47 @@ public class PhoneBook {
 		stdin.nextLine();
 		String val = stdin.nextLine();
 		showContacts(contactMgr.getContacts(field, val));
+		subMenu();
+	}
+
+	public static void setOrder() {
+		String[] options = { "ASC", "DSC" };
+		printOptions(options);
+		int order = -1;
+		while (order == -1) {
+			try {
+				order = stdin.nextInt();
+				if (0 < order && order <= 2)
+					break;
+				println("Error_wrong_order");
+				print("Please_enter_again:");
+			} catch (Exception e) {
+				println("Error_wrong_order");
+				print("Please_enter_again:");
+			}
+		}
+		config.setSortOrder(options[order - 1]);
+		contactMgr.updateConfig();
+		subMenu();
+	}
+
+	public static void setSortByField() {
+		printOptions(FIELDS);
+		int field = -1;
+		while (field == -1) {
+			try {
+				field = stdin.nextInt();
+				if (0 < field && field <= FIELDS.length)
+					break;
+				println("Error_wrong_field");
+				print("Please_enter_again:");
+			} catch (Exception e) {
+				println("Error_wrong_field");
+				print("Please_enter_again:");
+			}
+		}
+		config.setSortByField(FIELDS[field - 1]);
+		contactMgr.updateConfig();
 		subMenu();
 	}
 
@@ -184,9 +229,11 @@ public class PhoneBook {
 					break;
 				case 11: // TODO: Set_show_perpage
 					break;
-				case 12: // TODO: Set_order
+				case 12:
+					setOrder();
 					break;
-				case 13: // TODO: Set_sort_by_field
+				case 13:
+					setSortByField();
 					break;
 				case 14:
 					showRawData();

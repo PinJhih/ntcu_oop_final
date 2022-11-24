@@ -16,12 +16,8 @@ public class ContactMgr {
 		for (String contact : rawData) {
 			contacts.add(new Contact(contact));
 		}
-
 		this.sortConfig = sortConfig;
-		String sortField = sortConfig.get("show_sort_field");
-		String order = sortConfig.get("show_sort_order");
-		comparator = Contact.getComparator(sortField, order);
-		Collections.sort(contacts, comparator);
+		updateConfig();
 	}
 
 	public ArrayList<String> getRawData() {
@@ -50,5 +46,12 @@ public class ContactMgr {
 		}
 		Collections.sort(res, comparator);
 		return res;
+	}
+
+	public void updateConfig() {
+		String sortField = sortConfig.get("show_sort_field");
+		String order = sortConfig.get("show_sort_order");
+		comparator = Contact.getComparator(sortField, order);
+		Collections.sort(contacts, comparator);
 	}
 }
