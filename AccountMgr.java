@@ -6,7 +6,7 @@ public class AccountMgr {
 	String verifyStr;
 	Map<String, String> accounts = new HashMap<>();
 
-	public AccountMgr(Config config) {
+	public AccountMgr(ConfigMgr config) {
 		FileMgr source = new FileMgr("account.txt");
 		ArrayList<String> data = source.getData();
 
