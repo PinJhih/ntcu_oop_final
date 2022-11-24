@@ -47,6 +47,27 @@ public class PhoneBook {
 			println(contain);
 	}
 
+	private static void subMenu() {
+		println("[0].Go_back_to_main_menu [99].Exit_system");
+		int cmd = -1;
+		while (cmd != 0) {
+			try {
+				cmd = stdin.nextInt();
+				if (cmd == 99)
+					System.exit(0);
+				if (cmd == 0)
+					break;
+				println("Error_wrong_command");
+				print("Please_enter_again:");
+			} catch (Exception e) {
+				println("Error_wrong_command");
+				print("Please_enter_again:");
+				stdin.nextLine(); // clear
+			}
+		}
+		println("");
+	}
+
 	private static void showContacts(ArrayList<Contact> contacts) {
 		Contact fields = new Contact("[ID] [Name] [Phone] [Catalog] [Email] [BD]");
 		fields.print(config.getDisplayConfig());
@@ -62,7 +83,7 @@ public class PhoneBook {
 	}
 
 	public static void main(String[] args) {
-		login();
+		// login();
 		int cmd = -1;
 		boolean cmdErr = false;
 		boolean terminated = false;
@@ -81,6 +102,7 @@ public class PhoneBook {
 			switch (cmd) {
 				case 1:
 					showAll();
+					subMenu();
 					break;
 				case 2: // TODO: Show_per_page
 					break;
