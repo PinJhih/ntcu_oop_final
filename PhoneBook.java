@@ -91,7 +91,6 @@ public class PhoneBook {
 	private static void showAll() {
 		ArrayList<Contact> contacts = contactMgr.getContacts();
 		showContacts(contacts);
-		subMenu();
 	}
 
 	private static void showByCat() {
@@ -113,7 +112,6 @@ public class PhoneBook {
 			}
 		}
 		showContacts(contactMgr.getContacts(cat));
-		subMenu();
 	}
 
 	private static void search() {
@@ -134,7 +132,6 @@ public class PhoneBook {
 		stdin.nextLine();
 		String val = stdin.nextLine();
 		showContacts(contactMgr.getContacts(field, val));
-		subMenu();
 	}
 
 	public static void setOrder() {
@@ -155,7 +152,6 @@ public class PhoneBook {
 		}
 		config.setSortOrder(options[order - 1]);
 		contactMgr.updateConfig();
-		subMenu();
 	}
 
 	public static void setSortByField() {
@@ -175,7 +171,6 @@ public class PhoneBook {
 		}
 		config.setSortByField(FIELDS[field - 1]);
 		contactMgr.updateConfig();
-		subMenu();
 	}
 
 	public static void showRawData() {
@@ -183,7 +178,6 @@ public class PhoneBook {
 		for (String data : rawData) {
 			println(data);
 		}
-		subMenu();
 	}
 
 	public static void main(String[] args) {
@@ -250,6 +244,7 @@ public class PhoneBook {
 					cmdErr = true;
 					break;
 			}
+			subMenu();
 		}
 	}
 }
