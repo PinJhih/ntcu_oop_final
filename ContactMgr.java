@@ -7,12 +7,13 @@ public class ContactMgr {
 	ArrayList<Contact> contacts = new ArrayList<>();
 	Map<String, String> sortConfig;
 	Comparator<Contact> comparator;
+	ArrayList<String> rawData;
 
 	public ContactMgr(Map<String, String> sortConfig) {
 		FileMgr source = new FileMgr("data.txt");
-		ArrayList<String> contactsInStr = source.getData();
+		rawData = source.getData();
 
-		for (String contact : contactsInStr) {
+		for (String contact : rawData) {
 			contacts.add(new Contact(contact));
 		}
 
@@ -21,6 +22,10 @@ public class ContactMgr {
 		String order = sortConfig.get("show_sort_order");
 		comparator = Contact.getComparator(sortField, order);
 		Collections.sort(contacts, comparator);
+	}
+
+	public ArrayList<String> getRawData() {
+		return rawData;
 	}
 
 	public ArrayList<Contact> getContacts() {

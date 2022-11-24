@@ -133,6 +133,14 @@ public class PhoneBook {
 		subMenu();
 	}
 
+	public static void showRawData() {
+		ArrayList<String> rawData = contactMgr.getRawData();
+		for (String data : rawData) {
+			println(data);
+		}
+		subMenu();
+	}
+
 	public static void main(String[] args) {
 		// login();
 		int cmd = -1;
@@ -180,11 +188,12 @@ public class PhoneBook {
 					break;
 				case 13: // TODO: Set_sort_by_field
 					break;
-				case 14: // TODO: Show_raw_data
+				case 14:
+					showRawData();
 					break;
 				case 15: // TODO: Data_optimize
 					break;
-				case 99: // TODO: Exit_system
+				case 99:
 					terminated = true;
 					System.exit(0);
 					break;
