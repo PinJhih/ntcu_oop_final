@@ -1,0 +1,6 @@
+1 Andy  0934-675983  Family  alice0212@gmail.com  0212
+2 Cherry  0943-333165 Classmate  Cherry1029@gmail.com  1029
+3 Ivy  0936-408012  Family  Ivy0716@yahoo.com.tw  0716
+4 Kelly  0965-009832  Friend	Kelly0303@yahoo.com.tw  0303
+5 Paul  0965-431322  Classmate  Paul1201@yahoo.com.tw  1201
+6 Zack  0912-125498  Friend  Zack0101@gmail.com  0101
