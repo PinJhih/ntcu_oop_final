@@ -15,6 +15,7 @@ public class PhoneBook {
 			"[11].Set_show_perpage [12].Set_order [13].Set_sort_by_field",
 			"[14].Show_raw_data [15].Data_optimize [99].Exit_system",
 			"****************************************" };
+	private static final String[] fields = { "ID", "Name", "Phone", "Catalog", "Email", "BD" };
 
 	private static void print(String str) {
 		System.out.print(str);
@@ -105,6 +106,32 @@ public class PhoneBook {
 		subMenu();
 	}
 
+	private static void search() {
+		for (int i = 0; i < fields.length; i++) {
+			if (i != 0)
+				print(" ");
+			System.out.printf("[%d].%s", i + 1, fields[i]);
+		}
+		System.out.println();
+		int field = -1;
+		while (field == -1) {
+			try {
+				field = stdin.nextInt();
+				if (0 < field && field <= fields.length)
+					break;
+				println("Error_wrong_field");
+				print("Please_enter_again:");
+			} catch (Exception e) {
+				println("Error_wrong_field");
+				print("Please_enter_again:");
+			}
+		}
+		stdin.nextLine();
+		String val = stdin.nextLine();
+		showContacts(contactMgr.getContacts(field, val));
+		subMenu();
+	}
+
 	public static void main(String[] args) {
 		// login();
 		int cmd = -1;
@@ -131,7 +158,8 @@ public class PhoneBook {
 				case 3:
 					showByCat();
 					break;
-				case 4: // TODO: Search
+				case 4:
+					search();
 					break;
 				case 5: // TODO: Modif
 					break;

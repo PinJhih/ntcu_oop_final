@@ -45,4 +45,20 @@ public class Contact {
 	public boolean isInCat(String cat) {
 		return this.cat.equals(cat);
 	}
+
+	public boolean isTarget(int field, String val) {
+		if (field == 1)
+			return this.id.equals(val);
+		if (field == 2)
+			return this.name.equals(val);
+		if (field == 3)
+			return this.phone.equals(val);
+		if (field == 4)
+			return this.cat.equals(val);
+		if (field == 5)
+			return this.email.equals(val);
+		if (field == 6)
+			return this.birthday.equals(val);
+		return false;
+	}
 }

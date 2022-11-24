@@ -24,4 +24,13 @@ public class ContactMgr {
 		}
 		return res;
 	}
+
+	public ArrayList<Contact> getContacts(int field, String val) {
+		ArrayList<Contact> res = new ArrayList<>();
+		for (Contact contact : contacts) {
+			if (contact.isTarget(field, val))
+				res.add(contact);
+		}
+		return res;
+	}
 }
