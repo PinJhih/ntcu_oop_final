@@ -41,4 +41,8 @@ public class Contact {
 		System.out.println();
 
 	}
+
+	public boolean isInCat(String cat) {
+		return this.cat.equals(cat);
+	}
 }

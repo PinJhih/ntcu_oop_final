@@ -15,4 +15,13 @@ public class ContactMgr {
 	public ArrayList<Contact> getContacts() {
 		return contacts;
 	}
+
+	public ArrayList<Contact> getContacts(String cat) {
+		ArrayList<Contact> res = new ArrayList<>();
+		for (Contact contact : contacts) {
+			if (contact.isInCat(cat))
+				res.add(contact);
+		}
+		return res;
+	}
 }

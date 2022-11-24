@@ -65,7 +65,7 @@ public class PhoneBook {
 				stdin.nextLine(); // clear
 			}
 		}
-		println("");
+		System.out.println();
 	}
 
 	private static void showContacts(ArrayList<Contact> contacts) {
@@ -80,6 +80,29 @@ public class PhoneBook {
 	private static void showAll() {
 		ArrayList<Contact> contacts = contactMgr.getContacts();
 		showContacts(contacts);
+		subMenu();
+	}
+
+	private static void showByCat() {
+		catMgr.print();
+		int index;
+		String cat = null;
+		while (cat == null) {
+			try {
+				index = stdin.nextInt();
+				cat = catMgr.getCat(index - 1);
+				if (cat != null)
+					break;
+				println("Error_wrong_catalog");
+				print("Please_enter_again:");
+			} catch (Exception e) {
+				println("Error_wrong_catalog");
+				print("Please_enter_again:");
+				stdin.nextLine();
+			}
+		}
+		showContacts(contactMgr.getContacts(cat));
+		subMenu();
 	}
 
 	public static void main(String[] args) {
@@ -102,11 +125,11 @@ public class PhoneBook {
 			switch (cmd) {
 				case 1:
 					showAll();
-					subMenu();
 					break;
 				case 2: // TODO: Show_per_page
 					break;
-				case 3: // TODO: Show_by_catalog
+				case 3:
+					showByCat();
 					break;
 				case 4: // TODO: Search
 					break;
