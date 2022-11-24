@@ -59,11 +59,9 @@ public class PhoneBook {
 					System.exit(0);
 				if (cmd == 0)
 					break;
-				println("Error_wrong_command");
-				print("Please_enter_again:");
+				printCmdErr();
 			} catch (Exception e) {
-				println("Error_wrong_command");
-				print("Please_enter_again:");
+				printCmdErr();
 				stdin.nextLine(); // clear
 			}
 		}
@@ -77,6 +75,11 @@ public class PhoneBook {
 			System.out.printf("[%d].%s", i + 1, options[i]);
 		}
 		System.out.println();
+	}
+
+	private static void printCmdErr() {
+		println("Error_wrong_command");
+		print("Please_enter_again:");
 	}
 
 	private static void showContacts(ArrayList<Contact> contacts) {
@@ -138,8 +141,7 @@ public class PhoneBook {
 					if (cmd == 1)
 						break;
 					else {
-						println("Error_wrong_command");
-						print("Please_enter_again:");
+						printCmdErr();
 						cmdErr = true;
 					}
 				} else if (page == 0) {
@@ -148,8 +150,7 @@ public class PhoneBook {
 					else if (cmd == 2)
 						break;
 					else {
-						println("Error_wrong_command");
-						print("Please_enter_again:");
+						printCmdErr();
 						cmdErr = true;
 					}
 				} else if (page == numPages - 1) {
@@ -158,8 +159,7 @@ public class PhoneBook {
 					else if (cmd == 2)
 						break;
 					else {
-						println("Error_wrong_command");
-						print("Please_enter_again:");
+						printCmdErr();
 						cmdErr = true;
 					}
 				} else {
@@ -170,14 +170,12 @@ public class PhoneBook {
 					else if (cmd == 3)
 						break;
 					else {
-						println("Error_wrong_command");
-						print("Please_enter_again:");
+						printCmdErr();
 						cmdErr = true;
 					}
 				}
 			} catch (Exception e) {
-				println("Error_wrong_command");
-				print("Please_enter_again:");
+				printCmdErr();
 				cmdErr = true;
 			}
 		}
@@ -330,8 +328,7 @@ public class PhoneBook {
 					System.exit(0);
 					break;
 				default:
-					println("Error_wrong_command");
-					print("Please_enter_again:");
+					printCmdErr();
 					cmdErr = true;
 					break;
 			}
