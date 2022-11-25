@@ -5,7 +5,7 @@ public class PhoneBook {
 	private static final Scanner stdin = new Scanner(System.in);
 	private static final ConfigMgr config = new ConfigMgr();
 	private static final AccountMgr accountMgr = new AccountMgr(config);
-	private static final ContactMgr contactMgr = new ContactMgr(config.getSortConfig());
+	private static final ContactMgr contactMgr = new ContactMgr(config);
 	private static final CatMgr catMgr = new CatMgr();
 
 	private static final String[] MAIN_MENU_CONTAIN = { "****************************************",

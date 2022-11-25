@@ -5,18 +5,18 @@ import java.util.Map;
 
 public class ContactMgr {
 	ArrayList<Contact> contacts = new ArrayList<>();
-	Map<String, String> sortConfig;
+	ConfigMgr config;
 	Comparator<Contact> comparator;
 	ArrayList<String> rawData;
 
-	public ContactMgr(Map<String, String> sortConfig) {
+	public ContactMgr(ConfigMgr config) {
 		FileMgr source = new FileMgr("data.txt");
 		rawData = source.getData();
 
 		for (String contact : rawData) {
 			contacts.add(new Contact(contact));
 		}
-		this.sortConfig = sortConfig;
+		this.config = config;
 		updateConfig();
 	}
 
@@ -49,6 +49,7 @@ public class ContactMgr {
 	}
 
 	public void updateConfig() {
+		Map<String, String> sortConfig = config.getSortConfig();
 		String sortField = sortConfig.get("show_sort_field");
 		String order = sortConfig.get("show_sort_order");
 		comparator = Contact.getComparator(sortField, order);
