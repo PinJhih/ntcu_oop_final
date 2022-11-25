@@ -222,6 +222,12 @@ public class PhoneBook {
 		showContacts(contactMgr.getContacts(field, val));
 	}
 
+	public static void showAllCat() {
+		ArrayList<String> cats = catMgr.getCats();
+		for (String cat : cats)
+			println(cat);
+	}
+
 	public static void setOrder() {
 		String[] options = { "ASC", "DSC" };
 		printOptions(options);
@@ -306,7 +312,8 @@ public class PhoneBook {
 					break;
 				case 8: // TODO: Add_catalog
 					break;
-				case 9: // TODO: Show_all_catalog
+				case 9:
+					showAllCat();
 					break;
 				case 10: // TODO: Set_display_field
 					break;

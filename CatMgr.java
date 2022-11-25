@@ -8,7 +8,7 @@ public class CatMgr {
 		cats = source.getData();
 	}
 
-	public ArrayList<String> getCat() {
+	public ArrayList<String> getCats() {
 		return cats;
 	}
 
