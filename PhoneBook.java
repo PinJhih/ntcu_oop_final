@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Scanner;
 
 public class PhoneBook {
@@ -228,6 +229,35 @@ public class PhoneBook {
 			println(cat);
 	}
 
+	public static void setDisplayFields() {
+		String[] options = { "Yes", "No" };
+		String[] keys = { "show_name",
+				"show_phone",
+				"show_catalog",
+				"show_email",
+				"show_birthday"
+		};
+		Map<String, Boolean> displayConfig = config.getDisplayConfig();
+
+		for (int i = 1; i < FIELDS.length; i++) {
+			println(FIELDS[i]);
+			printOptions(options);
+			int cmd;
+			while (true) {
+				try {
+					cmd = stdin.nextInt();
+					if (cmd == 1 || cmd == 2)
+						break;
+				} catch (Exception e) {
+				}
+				printCmdErr();
+			}
+			boolean val = (cmd == 1);
+			displayConfig.put(keys[i - 1], val);
+		}
+		config.save();
+	}
+
 	public static void setShowPerPage() {
 		int numRows;
 		while (true) {
@@ -332,7 +362,8 @@ public class PhoneBook {
 				case 9:
 					showAllCat();
 					break;
-				case 10: // TODO: Set_display_field
+				case 10:
+					setDisplayFields();
 					break;
 				case 11:
 					setShowPerPage();
