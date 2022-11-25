@@ -384,7 +384,7 @@ public class PhoneBook {
 	}
 
 	public static void main(String[] args) {
-		// login();
+		login();
 		int cmd = -1;
 		boolean cmdErr = false;
 		boolean terminated = false;
