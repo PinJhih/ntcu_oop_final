@@ -59,6 +59,11 @@ public class ConfigMgr {
 		return lastID;
 	}
 
+	public void incLastID() {
+		lastID++;
+		save();
+	}
+
 	public Map<String, String> getSortConfig() {
 		return sortConfig;
 	}

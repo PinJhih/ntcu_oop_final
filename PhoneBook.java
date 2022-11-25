@@ -206,6 +206,70 @@ public class PhoneBook {
 		showContacts(contactMgr.getContacts(field, val));
 	}
 
+	private static String selectCat() {
+		catMgr.print();
+		int index;
+		String cat = null;
+		while (cat == null) {
+			try {
+				index = stdin.nextInt();
+				cat = catMgr.getCat(index - 1);
+				if (cat != null)
+					break;
+				println("Error_wrong_catalog");
+				print("Please_enter_again:");
+			} catch (Exception e) {
+				println("Error_wrong_catalog");
+				print("Please_enter_again:");
+				stdin.nextLine();
+			}
+		}
+		return cat;
+	}
+
+	private static Contact getContactFromUser(int ID) {
+		String name, phone, cat, email, bd;
+		print("Name:");
+		stdin.nextLine();
+		name = stdin.nextLine();
+		print("Phone:");
+		phone = stdin.nextLine();
+
+		cat = selectCat();
+
+		stdin.nextLine();
+		print("Email:");
+		email = stdin.nextLine();
+		print("Birthday:");
+		bd = stdin.nextLine();
+		String raw = String.format("%04d %s %s %s %s %s", ID, name, phone, cat, email, bd);
+		return new Contact(raw);
+	}
+
+	private static void modify() {
+		String[] errMsg = { "Error_wrong_field", "Please_enter_again:" };
+		int ID, index;
+		while (true) {
+			try {
+				ID = stdin.nextInt();
+				index = contactMgr.find(ID);
+				if (index != -1)
+					break;
+			} catch (Exception e) {
+			}
+			printErrMsg(errMsg);
+		}
+		Contact contact = getContactFromUser(ID);
+		contactMgr.update(contact, index);
+	}
+
+	private static void add() {
+		int ID = config.getLastID() + 1;
+		Contact contact = getContactFromUser(ID);
+		contactMgr.insert(contact);
+		config.incLastID();
+	}
+
 	public static void addCat() {
 		ArrayList<String> cats = catMgr.getCats();
 		String[] errMsg = { "Error_duplicated_catalog", "Please_enter_again:" };
@@ -318,11 +382,13 @@ public class PhoneBook {
 				case 4:
 					search();
 					break;
-				case 5: // TODO: Modif
+				case 5:
+					modify();
 					break;
 				case 6: // TODO: Delete
 					break;
-				case 7: // TODO: Add_contact
+				case 7:
+					add();
 					break;
 				case 8:
 					addCat();

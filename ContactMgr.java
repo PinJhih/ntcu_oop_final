@@ -25,8 +25,25 @@ public class ContactMgr {
 		return rawData;
 	}
 
+	public int find(int ID) {
+		String id = String.format("%04d", ID);
+		for (int i = 0; i < contacts.size(); i++) {
+			if (contacts.get(i).isTarget(1, id))
+				return i;
+		}
+		return -1;
+	}
+
 	public void insert(Contact contact) {
 		contacts.add(contact);
+		save();
+	}
+
+	public void update(Contact contact, int index) {
+		contacts.remove(index);
+		contacts.add(contact);
+		Collections.sort(contacts, Contact.ORDER_BY_ID_ASC);
+		save();
 	}
 
 	public ArrayList<Contact> getContacts() {
