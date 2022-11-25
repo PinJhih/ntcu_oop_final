@@ -20,7 +20,8 @@ public class FileMgr {
 			BufferedReader source = new BufferedReader(reader);
 			res = new ArrayList<>();
 			for (String l = source.readLine(); l != null; l = source.readLine()) {
-				res.add(l);
+				if (l.length() != 0)
+					res.add(l);
 			}
 			source.close();
 		} catch (Exception e) {
