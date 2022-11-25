@@ -25,7 +25,13 @@ public class ContactMgr {
 		return rawData;
 	}
 
+	public void insert(Contact contact) {
+		contacts.add(contact);
+	}
+
 	public ArrayList<Contact> getContacts() {
+		ArrayList<Contact> contacts = new ArrayList<>(this.contacts);
+		Collections.sort(contacts, comparator);
 		return contacts;
 	}
 
