@@ -89,10 +89,10 @@ public class ConfigMgr {
 	public void save() {
 		ArrayList<String> data = new ArrayList<>();
 		data.add("verify_string:" + verifyString);
-		data.add("used_last_id:" + lastID);
+		data.add("used_last_id:" + String.format("%04d", lastID));
 		data.add("show_sort_field:" + sortConfig.get("show_sort_field"));
 		data.add("show_sort_order:" + sortConfig.get("show_sort_order"));
-		data.add("show_name:" + sortConfig.get("show_name"));
+		data.add("show_name:" + displayConfig.get("show_name"));
 		data.add("show_phone:" + displayConfig.get("show_phone"));
 		data.add("show_catalog:" + displayConfig.get("show_catalog"));
 		data.add("show_email:" + displayConfig.get("show_email"));
