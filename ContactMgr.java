@@ -36,13 +36,14 @@ public class ContactMgr {
 
 	public void insert(Contact contact) {
 		contacts.add(contact);
+		Collections.sort(contacts, comparator);
 		save();
 	}
 
 	public void update(Contact contact, int index) {
 		contacts.remove(index);
 		contacts.add(contact);
-		Collections.sort(contacts, Contact.ORDER_BY_ID_ASC);
+		Collections.sort(contacts, comparator);
 		save();
 	}
 
@@ -91,5 +92,11 @@ public class ContactMgr {
 			data.add(contact.toString());
 		}
 		file.setData(data);
+	}
+
+	public void optimize(Comparator<Contact> comparator) {
+		Collections.sort(contacts, comparator);
+		save();
+		Collections.sort(contacts, this.comparator);
 	}
 }

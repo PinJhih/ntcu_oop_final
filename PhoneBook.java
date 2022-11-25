@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -368,6 +369,20 @@ public class PhoneBook {
 		}
 	}
 
+	public static void optimize() {
+		int[] fieldCodes = { 1, 2, 3, 4, 5, 6 };
+		String[] fieldErrMsgs = { "Error_wrong_field", "Please_enter_again:" };
+		int field = getCmd(FIELDS, fieldCodes, fieldErrMsgs);
+
+		String[] options = { "ASC", "DSC" };
+		int[] orderCodes = { 1, 2 };
+		String[] orderErrMsgs = { "Error_wrong_order", "Please_enter_again:" };
+		int order = getCmd(options, orderCodes, orderErrMsgs);
+
+		Comparator<Contact> cmp = Contact.getComparator(FIELDS[field - 1], options[order - 1]);
+		contactMgr.optimize(cmp);
+	}
+
 	public static void main(String[] args) {
 		// login();
 		int cmd = -1;
@@ -428,7 +443,8 @@ public class PhoneBook {
 				case 14:
 					showRawData();
 					break;
-				case 15: // TODO: Data_optimize
+				case 15:
+					optimize();
 					break;
 				case 99:
 					terminated = true;
