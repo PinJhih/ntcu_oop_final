@@ -46,6 +46,11 @@ public class ContactMgr {
 		save();
 	}
 
+	public void delete(int index) {
+		contacts.remove(index);
+		save();
+	}
+
 	public ArrayList<Contact> getContacts() {
 		ArrayList<Contact> contacts = new ArrayList<>(this.contacts);
 		Collections.sort(contacts, comparator);

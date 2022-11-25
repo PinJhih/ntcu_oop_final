@@ -247,7 +247,7 @@ public class PhoneBook {
 	}
 
 	private static void modify() {
-		String[] errMsg = { "Error_wrong_field", "Please_enter_again:" };
+		String[] errMsg = { "Error_wrong_ID", "Please_enter_again:" };
 		int ID, index;
 		while (true) {
 			try {
@@ -261,6 +261,22 @@ public class PhoneBook {
 		}
 		Contact contact = getContactFromUser(ID);
 		contactMgr.update(contact, index);
+	}
+
+	private static void delete() {
+		String[] errMsg = { "Error_wrong_ID", "Please_enter_again:" };
+		int ID, index;
+		while (true) {
+			try {
+				ID = stdin.nextInt();
+				index = contactMgr.find(ID);
+				if (index != -1)
+					break;
+			} catch (Exception e) {
+			}
+			printErrMsg(errMsg);
+		}
+		contactMgr.delete(index);
 	}
 
 	private static void add() {
@@ -385,7 +401,8 @@ public class PhoneBook {
 				case 5:
 					modify();
 					break;
-				case 6: // TODO: Delete
+				case 6:
+					delete();
 					break;
 				case 7:
 					add();
