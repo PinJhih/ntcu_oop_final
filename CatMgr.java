@@ -2,10 +2,11 @@ import java.util.ArrayList;
 
 public class CatMgr {
 	ArrayList<String> cats;
+	FileMgr file;
 
 	public CatMgr() {
-		FileMgr source = new FileMgr("catalog.txt");
-		cats = source.getData();
+		file = new FileMgr("catalog.txt");
+		cats = file.getData();
 	}
 
 	public ArrayList<String> getCats() {
@@ -25,5 +26,9 @@ public class CatMgr {
 			System.out.printf("[%d].%s", i + 1, cats.get(i));
 		}
 		System.out.println();
+	}
+
+	public void save() {
+		file.setData(cats);
 	}
 }

@@ -8,10 +8,11 @@ public class ContactMgr {
 	ConfigMgr config;
 	Comparator<Contact> comparator;
 	ArrayList<String> rawData;
+	FileMgr file;
 
 	public ContactMgr(ConfigMgr config) {
-		FileMgr source = new FileMgr("data.txt");
-		rawData = source.getData();
+		file = new FileMgr("data.txt");
+		rawData = file.getData();
 
 		for (String contact : rawData) {
 			contacts.add(new Contact(contact));
@@ -54,5 +55,13 @@ public class ContactMgr {
 		String order = sortConfig.get("show_sort_order");
 		comparator = Contact.getComparator(sortField, order);
 		Collections.sort(contacts, comparator);
+	}
+
+	public void save() {
+		ArrayList<String> data = new ArrayList<>();
+		for (Contact contact : contacts) {
+			data.add(contact.toString());
+		}
+		file.setData(data);
 	}
 }
