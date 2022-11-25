@@ -10,13 +10,18 @@ public class CatMgr {
 	}
 
 	public ArrayList<String> getCats() {
-		return cats;
+		return new ArrayList<String>(cats);
 	}
 
 	public String getCat(int index) {
 		if (index >= cats.size())
 			return null;
 		return cats.get(index);
+	}
+
+	public void insert(String cat) {
+		cats.add(cat);
+		save();
 	}
 
 	public void print() {

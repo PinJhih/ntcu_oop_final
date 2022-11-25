@@ -206,6 +206,21 @@ public class PhoneBook {
 		showContacts(contactMgr.getContacts(field, val));
 	}
 
+	public static void addCat() {
+		ArrayList<String> cats = catMgr.getCats();
+		String[] errMsg = { "Error_duplicated_catalog", "Please_enter_again:" };
+		String cat;
+		while (true) {
+			if (stdin.hasNextLine())
+				stdin.nextLine();
+			cat = stdin.nextLine();
+			if (!cats.contains(cat))
+				break;
+			printErrMsg(errMsg);
+		}
+		catMgr.insert(cat);
+	}
+
 	public static void showAllCat() {
 		ArrayList<String> cats = catMgr.getCats();
 		for (String cat : cats)
@@ -309,7 +324,8 @@ public class PhoneBook {
 					break;
 				case 7: // TODO: Add_contact
 					break;
-				case 8: // TODO: Add_catalog
+				case 8:
+					addCat();
 					break;
 				case 9:
 					showAllCat();
