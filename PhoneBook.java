@@ -19,6 +19,8 @@ public class PhoneBook {
 
 	private static final String[] FIELDS = { "ID", "Name", "Phone", "Catalog", "Email", "BD" };
 
+	private static final String[] MSG_CMD_ERR = { "Error_wrong_command", "Please_enter_again:" };
+
 	private static void print(String str) {
 		System.out.print(str);
 	}
@@ -51,36 +53,56 @@ public class PhoneBook {
 	}
 
 	private static void subMenu() {
-		println("[0].Go_back_to_main_menu [99].Exit_system");
-		int cmd = -1;
-		while (cmd != 0) {
-			try {
-				cmd = stdin.nextInt();
-				if (cmd == 99)
-					System.exit(0);
-				if (cmd == 0)
-					break;
-				printCmdErr();
-			} catch (Exception e) {
-				printCmdErr();
-				stdin.nextLine(); // clear
-			}
-		}
+		int codes[] = { 0, 99 };
+		String[] options = { "Go_back_to_main_menu", "Exit_system" };
+		int cmd = getCmd(options, codes, MSG_CMD_ERR);
+		if (cmd == 99)
+			System.exit(0);
 		System.out.println();
 	}
 
-	private static void printOptions(String[] options) {
+	private static void printOptions(String[] options, int[] codes) {
 		for (int i = 0; i < options.length; i++) {
 			if (i != 0)
 				print(" ");
-			System.out.printf("[%d].%s", i + 1, options[i]);
+			System.out.printf("[%d].%s", codes[i], options[i]);
 		}
 		System.out.println();
 	}
 
-	private static void printCmdErr() {
-		println("Error_wrong_command");
-		print("Please_enter_again:");
+	private static boolean isValidCmd(int[] codes, int cmd) {
+		for (int code : codes) {
+			if (code == cmd)
+				return true;
+		}
+		return false;
+	}
+
+	private static int getCmd(String[] options, int[] codes, String[] errorMes) {
+		int cmd;
+		printOptions(options, codes);
+		while (true) {
+			try {
+				cmd = stdin.nextInt();
+				if (isValidCmd(codes, cmd))
+					break;
+			} catch (Exception e) {
+				if (stdin.hasNextLine())
+					stdin.nextLine();
+			}
+			printErrMsg(errorMes);
+		}
+		return cmd;
+	}
+
+	private static void printErrMsg(String[] errorMes) {
+		int n = errorMes.length;
+		for (int i = 0; i < n; i++) {
+			if (i != n - 1)
+				println(errorMes[i]);
+			else
+				print(errorMes[i]);
+		}
 	}
 
 	private static void showContacts(ArrayList<Contact> contacts) {
@@ -112,72 +134,42 @@ public class PhoneBook {
 	}
 
 	private static void showPerPage() {
-		String[][] options = { { "Next Page", "Exit" },
-				{ "Last Page", "Next Page", "Exit" },
-				{ "Last Page", "Exit" }, { "Exit" } };
+		String[][] options = { { "Exit" }, { "Exit", "Next Page" }, { "Exit", "Last Page" },
+				{ "Exit", "Last Page", "Next Page" }
+		};
+		int[][] codes = {
+				{ 0 }, { 0, 2 }, { 0, 1 }, { 0, 1, 2 }
+		};
 		ArrayList<Contact> contacts = contactMgr.getContacts();
 		int pageSize = config.getRowsPerPage();
 		int numPages = Math.ceilDiv(contacts.size(), pageSize);
 		ArrayList<ArrayList<Contact>> pages = toPages(contacts, numPages, pageSize);
 
 		int page = 0;
-		int cmd = -1;
-		boolean cmdErr = false;
-		while (true) {
-			if (!cmdErr)
-				showContacts(pages.get(page));
-			cmdErr = false;
-			try {
-				if (numPages <= 1)
-					printOptions(options[3]);
-				else if (page == 0)
-					printOptions(options[0]);
-				else if (page == numPages - 1)
-					printOptions(options[2]);
-				else
-					printOptions(options[1]);
+		int cmd;
+		boolean terminated = false;
+		while (!terminated) {
+			System.out.println();
+			showContacts(pages.get(page));
+			if (numPages == 1)
+				cmd = getCmd(options[0], codes[0], MSG_CMD_ERR);
+			else if (page == 0)
+				cmd = getCmd(options[1], codes[1], MSG_CMD_ERR);
+			else if (page == numPages - 1)
+				cmd = getCmd(options[2], codes[2], MSG_CMD_ERR);
+			else
+				cmd = getCmd(options[3], codes[3], MSG_CMD_ERR);
 
-				cmd = stdin.nextInt();
-				if (numPages <= 1) {
-					if (cmd == 1)
-						break;
-					else {
-						printCmdErr();
-						cmdErr = true;
-					}
-				} else if (page == 0) {
-					if (cmd == 1)
-						page++;
-					else if (cmd == 2)
-						break;
-					else {
-						printCmdErr();
-						cmdErr = true;
-					}
-				} else if (page == numPages - 1) {
-					if (cmd == 1)
-						page--;
-					else if (cmd == 2)
-						break;
-					else {
-						printCmdErr();
-						cmdErr = true;
-					}
-				} else {
-					if (cmd == 1)
-						page--;
-					else if (cmd == 2)
-						page++;
-					else if (cmd == 3)
-						break;
-					else {
-						printCmdErr();
-						cmdErr = true;
-					}
-				}
-			} catch (Exception e) {
-				printCmdErr();
-				cmdErr = true;
+			switch (cmd) {
+				case 0:
+					terminated = true;
+					break;
+				case 1:
+					page--;
+					break;
+				case 2:
+					page++;
+					break;
 			}
 		}
 	}
@@ -204,21 +196,12 @@ public class PhoneBook {
 	}
 
 	private static void search() {
-		printOptions(FIELDS);
-		int field = -1;
-		while (field == -1) {
-			try {
-				field = stdin.nextInt();
-				if (0 < field && field <= FIELDS.length)
-					break;
-				println("Error_wrong_field");
-				print("Please_enter_again:");
-			} catch (Exception e) {
-				println("Error_wrong_field");
-				print("Please_enter_again:");
-			}
-		}
-		stdin.nextLine();
+		String[] errMsgs = { "Error_wrong_field", "Please_enter_again:" };
+		int[] codes = { 1, 2, 3, 4, 5, 6 };
+		int field = getCmd(FIELDS, codes, errMsgs);
+
+		if (stdin.hasNextLine())
+			stdin.nextLine();
 		String val = stdin.nextLine();
 		showContacts(contactMgr.getContacts(field, val));
 	}
@@ -231,6 +214,7 @@ public class PhoneBook {
 
 	public static void setDisplayFields() {
 		String[] options = { "Yes", "No" };
+		int[] codes = { 1, 2 };
 		String[] keys = { "show_name",
 				"show_phone",
 				"show_catalog",
@@ -241,17 +225,7 @@ public class PhoneBook {
 
 		for (int i = 1; i < FIELDS.length; i++) {
 			println(FIELDS[i]);
-			printOptions(options);
-			int cmd;
-			while (true) {
-				try {
-					cmd = stdin.nextInt();
-					if (cmd == 1 || cmd == 2)
-						break;
-				} catch (Exception e) {
-				}
-				printCmdErr();
-			}
+			int cmd = getCmd(options, codes, MSG_CMD_ERR);
 			boolean val = (cmd == 1);
 			displayConfig.put(keys[i - 1], val);
 		}
@@ -277,39 +251,17 @@ public class PhoneBook {
 
 	public static void setOrder() {
 		String[] options = { "ASC", "DSC" };
-		printOptions(options);
-		int order = -1;
-		while (order == -1) {
-			try {
-				order = stdin.nextInt();
-				if (0 < order && order <= 2)
-					break;
-				println("Error_wrong_order");
-				print("Please_enter_again:");
-			} catch (Exception e) {
-				println("Error_wrong_order");
-				print("Please_enter_again:");
-			}
-		}
+		int[] codes = { 1, 2 };
+		String[] errMsgs = { "Error_wrong_order", "Please_enter_again:" };
+		int order = getCmd(options, codes, errMsgs);
 		config.setSortOrder(options[order - 1]);
 		contactMgr.updateConfig();
 	}
 
 	public static void setSortByField() {
-		printOptions(FIELDS);
-		int field = -1;
-		while (field == -1) {
-			try {
-				field = stdin.nextInt();
-				if (0 < field && field <= FIELDS.length)
-					break;
-				println("Error_wrong_field");
-				print("Please_enter_again:");
-			} catch (Exception e) {
-				println("Error_wrong_field");
-				print("Please_enter_again:");
-			}
-		}
+		int[] codes = { 1, 2, 3, 4, 5, 6 };
+		String[] errMsgs = { "Error_wrong_field", "Please_enter_again:" };
+		int field = getCmd(FIELDS, codes, errMsgs);
 		config.setSortByField(FIELDS[field - 1]);
 		contactMgr.updateConfig();
 	}
@@ -384,7 +336,7 @@ public class PhoneBook {
 					System.exit(0);
 					break;
 				default:
-					printCmdErr();
+					printErrMsg(MSG_CMD_ERR);
 					cmdErr = true;
 					break;
 			}
