@@ -7,7 +7,8 @@ public class ConfigMgr {
 	private int lastID;
 	private Map<String, String> sortConfig = new HashMap<>();
 	private Map<String, Boolean> displayConfig = new HashMap<>();
-	private int rowsPerPage;
+	private int showPerPage;
+	FileMgr file;
 
 	private class Pair {
 		public String key, val;
@@ -24,8 +25,8 @@ public class ConfigMgr {
 	}
 
 	public ConfigMgr() {
-		FileMgr source = new FileMgr("config.txt");
-		ArrayList<String> data = source.getData();
+		file = new FileMgr("config.txt");
+		ArrayList<String> data = file.getData();
 
 		Pair vs = toTokens(data.get(0));
 		Pair ID = toTokens(data.get(1));
@@ -47,7 +48,7 @@ public class ConfigMgr {
 		displayConfig.put(showCat.key, Boolean.parseBoolean(showCat.val));
 		displayConfig.put(showEmail.key, Boolean.parseBoolean(showEmail.val));
 		displayConfig.put(showBirth.key, Boolean.parseBoolean(showBirth.val));
-		rowsPerPage = Integer.parseInt(perPage.val);
+		showPerPage = Integer.parseInt(perPage.val);
 	}
 
 	public String getVerifyString() {
@@ -67,15 +68,22 @@ public class ConfigMgr {
 	}
 
 	public int getRowsPerPage() {
-		return rowsPerPage;
+		return showPerPage;
 	}
 
 	public void setSortByField(String field) {
 		sortConfig.put("show_sort_field", field.toLowerCase());
+		save();
 	}
 
 	public void setSortOrder(String order) {
 		sortConfig.put("show_sort_order", order.toLowerCase());
+		save();
+	}
+
+	public void setShowPerPage(int num) {
+		showPerPage = num;
+		save();
 	}
 
 	public void save() {
@@ -89,7 +97,7 @@ public class ConfigMgr {
 		data.add("show_catalog:" + displayConfig.get("show_catalog"));
 		data.add("show_email:" + displayConfig.get("show_email"));
 		data.add("show_birthday:" + displayConfig.get("show_birthday"));
-		data.add("show_defalt_perpage:" + rowsPerPage);
-
+		data.add("show_defalt_perpage:" + showPerPage);
+		file.setData(data);
 	}
 }

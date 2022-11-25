@@ -228,6 +228,23 @@ public class PhoneBook {
 			println(cat);
 	}
 
+	public static void setShowPerPage() {
+		int numRows;
+		while (true) {
+			try {
+				numRows = stdin.nextInt();
+				if (numRows > 0)
+					break;
+				println("Error_wrong_number_of_row");
+				print("Please_enter_again:");
+			} catch (Exception e) {
+				println("Error_wrong_number_of_row");
+				print("Please_enter_again:");
+			}
+		}
+		config.setShowPerPage(numRows);
+	}
+
 	public static void setOrder() {
 		String[] options = { "ASC", "DSC" };
 		printOptions(options);
@@ -317,7 +334,8 @@ public class PhoneBook {
 					break;
 				case 10: // TODO: Set_display_field
 					break;
-				case 11: // TODO: Set_show_perpage
+				case 11:
+					setShowPerPage();
 					break;
 				case 12:
 					setOrder();
