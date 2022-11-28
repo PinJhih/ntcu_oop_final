@@ -3,106 +3,96 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ConfigMgr {
-	private String verifyString;
-	private int lastID;
-	private Map<String, String> sortConfig = new HashMap<>();
-	private Map<String, Boolean> displayConfig = new HashMap<>();
-	private int showPerPage;
+	Map<String, String> config = new HashMap<>();
+	ArrayList<String> keys = new ArrayList<>(); // 用來記原本的順序
 	FileMgr file;
-
-	private class Pair {
-		public String key, val;
-
-		public Pair(String key, String val) {
-			this.key = key;
-			this.val = val;
-		}
-	}
-
-	private Pair toTokens(String str) {
-		String[] tokens = str.split(" *: *");
-		return new Pair(tokens[0], tokens[1]);
-	}
 
 	public ConfigMgr() {
 		file = new FileMgr("config.txt");
 		ArrayList<String> data = file.getData();
-
-		Pair vs = toTokens(data.get(0));
-		Pair ID = toTokens(data.get(1));
-		Pair sortField = toTokens(data.get(2));
-		Pair sortOrder = toTokens(data.get(3));
-		Pair showName = toTokens(data.get(4));
-		Pair showPhone = toTokens(data.get(5));
-		Pair showCat = toTokens(data.get(6));
-		Pair showEmail = toTokens(data.get(7));
-		Pair showBirth = toTokens(data.get(8));
-		Pair perPage = toTokens(data.get(9));
-
-		verifyString = vs.val;
-		lastID = Integer.parseInt(ID.val);
-		sortConfig.put(sortField.key, sortField.val);
-		sortConfig.put(sortOrder.key, sortOrder.val);
-		displayConfig.put(showName.key, Boolean.parseBoolean(showName.val));
-		displayConfig.put(showPhone.key, Boolean.parseBoolean(showPhone.val));
-		displayConfig.put(showCat.key, Boolean.parseBoolean(showCat.val));
-		displayConfig.put(showEmail.key, Boolean.parseBoolean(showEmail.val));
-		displayConfig.put(showBirth.key, Boolean.parseBoolean(showBirth.val));
-		showPerPage = Integer.parseInt(perPage.val);
+		for (String d : data) {
+			String[] tokens = d.split(" *: *");
+			String key = tokens[0], val = tokens[1];
+			keys.add(key);
+			config.put(key, val);
+		}
 	}
 
 	public String getVerifyString() {
-		return verifyString;
+		return config.get("verify_string");
 	}
 
 	public int getLastID() {
+		int lastID = Integer.parseInt(config.get("used_last_id"));
 		return lastID;
 	}
 
-	public void incLastID() {
-		lastID++;
-		save();
-	}
-
 	public Map<String, String> getSortConfig() {
-		return sortConfig;
-	}
-
-	public Map<String, Boolean> getDisplayConfig() {
+		Map<String, String> displayConfig = new HashMap<>();
+		for (String key : keys) {
+			if (key.indexOf("show_sort_") != -1) {
+				String val = config.get(key);
+				displayConfig.put(key, val);
+			}
+		}
 		return displayConfig;
 	}
 
+	public Map<String, Boolean> getDisplayConfig() {
+		Map<String, Boolean> displayConfig = new HashMap<>();
+		for (String key : keys) {
+			if (key.indexOf("show_") != -1) {
+				if (key.indexOf("show_sort_") == -1) {
+					boolean val = Boolean.parseBoolean(config.get(key));
+					displayConfig.put(key, val);
+				}
+			}
+		}
+		return displayConfig;
+	}
+
+	public void incLastID() {
+		int lastID = getLastID() + 1;
+		String id = String.valueOf(lastID);
+		config.put("used_last_id", id);
+		save();
+	}
+
 	public int getRowsPerPage() {
-		return showPerPage;
+		int rowsPerPage = Integer.parseInt(config.get("show_defalt_perpage"));
+		return rowsPerPage;
 	}
 
 	public void setSortByField(String field) {
-		sortConfig.put("show_sort_field", field.toLowerCase());
+		config.put("show_sort_field", field.toLowerCase());
 		save();
 	}
 
 	public void setSortOrder(String order) {
-		sortConfig.put("show_sort_order", order.toLowerCase());
+		config.put("show_sort_order", order.toLowerCase());
 		save();
 	}
 
 	public void setShowPerPage(int num) {
-		showPerPage = num;
+		String rowsPerPage = String.valueOf(num);
+		config.put("show_defalt_perpage", rowsPerPage);
+		save();
+	}
+
+	public void setDisplayFields(Map<String, Boolean> displayConfig) {
+		for (String key : displayConfig.keySet()) {
+			String val = String.valueOf(displayConfig.get(key));
+			config.put(key, val);
+		}
 		save();
 	}
 
 	public void save() {
 		ArrayList<String> data = new ArrayList<>();
-		data.add("verify_string:" + verifyString);
-		data.add("used_last_id:" + String.format("%04d", lastID));
-		data.add("show_sort_field:" + sortConfig.get("show_sort_field"));
-		data.add("show_sort_order:" + sortConfig.get("show_sort_order"));
-		data.add("show_name:" + displayConfig.get("show_name"));
-		data.add("show_phone:" + displayConfig.get("show_phone"));
-		data.add("show_catalog:" + displayConfig.get("show_catalog"));
-		data.add("show_email:" + displayConfig.get("show_email"));
-		data.add("show_birthday:" + displayConfig.get("show_birthday"));
-		data.add("show_defalt_perpage:" + showPerPage);
+		for (String key : keys) {
+			String d = String.format("%s: %s", key, config.get(key));
+			data.add(d);
+		}
 		file.setData(data);
 	}
 }

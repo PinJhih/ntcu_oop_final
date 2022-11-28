@@ -325,7 +325,7 @@ public class PhoneBook {
 			boolean val = (cmd == 1);
 			displayConfig.put(keys[i - 1], val);
 		}
-		config.save();
+		config.setDisplayFields(displayConfig);
 	}
 
 	public static void setShowPerPage() {
