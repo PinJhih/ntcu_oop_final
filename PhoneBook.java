@@ -12,7 +12,7 @@ public class PhoneBook {
 
 	private static final String[] MAIN_MENU_CONTAIN = { "****************************************",
 			"[1].Show_all [2].Show_per_page [3].Show_by_catalog ",
-			"[4].Search [5].Modify[6].Delete [7].Add_contact ",
+			"[4].Search [5].Modify [6].Delete [7].Add_contact ",
 			"[8].Add_catalog [9].Show_all_catalog [10].Set_display_field ",
 			"[11].Set_show_perpage [12].Set_order [13].Set_sort_by_field",
 			"[14].Show_raw_data [15].Data_optimize [99].Exit_system",
@@ -39,11 +39,11 @@ public class PhoneBook {
 			println("Verify_string:" + config.getVerifyString());
 			print("Input_Verify_string:");
 			String vs = stdin.nextLine();
-
 			if (accountMgr.login(acc, pw, vs)) {
 				println("Login_success");
 				return;
 			}
+			println("Error_wrong_account_password_or_verify_string");
 		}
 		System.exit(0);
 	}
