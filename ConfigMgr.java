@@ -5,6 +5,7 @@ import java.util.Map;
 public class ConfigMgr {
 	Map<String, String> config = new HashMap<>();
 	ArrayList<String> keys = new ArrayList<>(); // 用來記原本的順序
+	String[] displayConfigKeys = { "show_name", "show_phone", "show_catalog", "show_email", "show_birthday" };
 	FileMgr file;
 
 	public ConfigMgr() {
@@ -40,13 +41,9 @@ public class ConfigMgr {
 
 	public Map<String, Boolean> getDisplayConfig() {
 		Map<String, Boolean> displayConfig = new HashMap<>();
-		for (String key : keys) {
-			if (key.indexOf("show_") != -1) {
-				if (key.indexOf("show_sort_") == -1) {
-					boolean val = Boolean.parseBoolean(config.get(key));
-					displayConfig.put(key, val);
-				}
-			}
+		for (String key : displayConfigKeys) {
+			boolean val = Boolean.parseBoolean(config.get(key));
+			displayConfig.put(key, val);
 		}
 		return displayConfig;
 	}
