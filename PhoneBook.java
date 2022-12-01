@@ -134,6 +134,12 @@ public class PhoneBook {
 		return pages;
 	}
 
+	private static int ceilDiv(double a, double b) {
+		double d = a / b;
+		d = Math.ceil(d);
+		return (int) d;
+	}
+
 	private static void showPerPage() {
 		String[][] options = { { "Exit" }, { "Exit", "Next Page" }, { "Exit", "Last Page" },
 				{ "Exit", "Last Page", "Next Page" }
@@ -143,7 +149,9 @@ public class PhoneBook {
 		};
 		ArrayList<Contact> contacts = contactMgr.getContacts();
 		int pageSize = config.getRowsPerPage();
-		int numPages = Math.ceilDiv(contacts.size(), pageSize);
+		// Java 18
+		// int numPages = Math.ceilDiv(contacts.size(), pageSize);
+		int numPages = ceilDiv(contacts.size(), pageSize);
 		ArrayList<ArrayList<Contact>> pages = toPages(contacts, numPages, pageSize);
 
 		int page = 0;
